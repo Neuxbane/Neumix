@@ -4,9 +4,10 @@
 Neumix is a dynamic UI renderer built with React and integrated with NextUI components. It allows developers to define UI elements in a JSON structure, making it easy to create, modify, and manage user interfaces dynamically. This component leverages TypeScript for type safety and better coding practices, ensuring a seamless development experience.
 
 ## Keywords
+- JSON UI components
 - Dynamic UI components
 - React dynamic rendering
-- NextUI integration
+- NextUI JSON UI
 - React interface elements
 - UI element configuration
 - React functional components

@@ -1,53 +1,163 @@
-# Next.js & NextUI Template
+# Neumix
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+## Abstract
+Neumix is a dynamic UI renderer built with React and integrated with NextUI components. It allows developers to define UI elements in a JSON structure, making it easy to create, modify, and manage user interfaces dynamically. This component leverages TypeScript for type safety and better coding practices, ensuring a seamless development experience.
 
-[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
+## Keywords
+- Dynamic UI components
+- React dynamic rendering
+- NextUI integration
+- React interface elements
+- UI element configuration
+- React functional components
+- TypeScript React UI
+- Customizable UI in React
+- Dynamic form elements
+- React component rendering
 
-## Technologies Used
+## Getting Started
 
-- [Next.js 14](https://nextjs.org/docs/getting-started)
-- [NextUI v2](https://nextui.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+### Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-username/Neumix.git
+   cd Neumix
+   ```
 
-## How to Use
+2. Install the dependencies:
+   ```sh
+   npm install
+   ```
 
-### Use the template with create-next-app
+3. Start the development server:
+   ```sh
+   npm start
+   ```
 
-To create a new project based on this template using `create-next-app`, run the following command:
+### Usage
 
-```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
-```
+1. Define your UI elements in a JSON structure. Here is an example JSON configuration:
 
-### Install dependencies
+   ```json
+   [
+       {
+         "type": "text",
+         "size": "h1",
+         "content": "Welcome to Dynamic UI",
+         "style": { "color": "blue" }
+       },
+       {
+         "type": "input",
+         "placeholder": "Enter your name",
+         "inputType": "text",
+         "style": { "margin": "10px 0" },
+         "action": "handleInputChange"
+       },
+       {
+         "type": "button",
+         "content": "Submit",
+         "action": "handleSubmit",
+         "style": {
+           "backgroundColor": "green",
+           "color": "white"
+         },
+       },
+       {
+         "type": "card",
+         "title": "Card Title",
+         "style": { "margin": "20px 0" }
+         "content": [
+           {
+             "type": "text",
+             "size": "p",
+             "content": "This is a card content"
+           },
+           {
+             "type": "button",
+             "content": "Click Me",
+             "action": "handleCardButtonClick"
+           }
+         ],
+       }
+     ]
+   ```
 
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
+2. Import and use the `DynamicUI` component in your React application. Ensure you define the necessary action handlers.
 
-```bash
-npm install
-```
+   ```javascript
+   import React from 'react';
+   import DynamicUI, { allElements } from './DynamicUI';
 
-### Run the development server
+   // Define action handlers
+   const handleInputChange = (e) => {
+     console.log('Input changed:', e.target.value);
+   };
 
-```bash
-npm run dev
-```
+   const handleSubmit = () => {
+     console.log('Submit button clicked');
+   };
 
-### Setup pnpm (optional)
+   const handleCardButtonClick = () => {
+     console.log('Card button clicked');
+   };
 
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
+   // JSON structure defining the UI elements
+   const json =    [
+      {
+         "type": "text",
+         "size": "h1",
+         "content": "Welcome to Dynamic UI",
+         "style": { "color": "blue" }
+      },
+      {
+         "type": "input",
+         "placeholder": "Enter your name",
+         "inputType": "text",
+         "style": { "margin": "10px 0" },
+         "action": "handleInputChange"
+      },
+      {
+         "type": "button",
+         "content": "Submit",
+         "action": "handleSubmit",
+         "style": {
+            "backgroundColor": "green",
+            "color": "white"
+         },
+      },
+      {
+         "type": "card",
+         "title": "Card Title",
+         "style": { "margin": "20px 0" }
+         "content": [
+            {
+               "type": "text",
+               "size": "p",
+               "content": "This is a card content"
+            },
+            {
+               "type": "button",
+               "content": "Click Me",
+               "action": "handleCardButtonClick"
+            }
+         ],
+      }
+   ];
 
-```bash
-public-hoist-pattern[]=*@nextui-org/*
-```
+   const App = () => {
+     return <DynamicUI elements={json.elements as allElements[]} />;
+   };
 
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+   export default App;
+   ```
+
+3. Run your React application to see the dynamically rendered UI.
+
+### Documentation
+For more details and examples, please refer to the [documentation](./docs).
+
+## Contributing
+Contributions are welcome! Please read the [contributing guidelines](./CONTRIBUTING.md) first.
 
 ## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.

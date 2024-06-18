@@ -1,4 +1,9 @@
 # Neumix
+Please contribute on this repo by giving new feature on the `DynamicUI` component 🙏. This abstract bellow are written by ChatGPT by understanding the component and the target.
+
+## Preview
+![preview1](/screenshoots/preview1.png)
+![preview2](/screenshoots/preview2.png)
 
 ## Abstract
 Neumix is a dynamic UI renderer built with React and integrated with NextUI components. It allows developers to define UI elements in a JSON structure, making it easy to create, modify, and manage user interfaces dynamically. This component leverages TypeScript for type safety and better coding practices, ensuring a seamless development experience.

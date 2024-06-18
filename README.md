@@ -87,7 +87,7 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
 
    ```javascript
    import React from 'react';
-   import DynamicUI, { allElements } from './DynamicUI';
+   import DynamicUI, { allElements } from '@/components/dynamix';
 
    // Define action handlers
    const handleInputChange = (e) => {

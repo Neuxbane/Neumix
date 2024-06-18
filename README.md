@@ -20,7 +20,7 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/Neumix.git
+   git clone https://github.com/neuxbane/Neumix.git
    cd Neumix
    ```
 

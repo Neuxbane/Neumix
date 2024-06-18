@@ -52,12 +52,12 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
          "placeholder": "Enter your name",
          "inputType": "text",
          "style": { "margin": "10px 0" },
-         "action": "handleInputChange"
+         "action": handleInputChange
        },
        {
          "type": "button",
          "content": "Submit",
-         "action": "handleSubmit",
+         "action": handleSubmit,
          "style": {
            "backgroundColor": "green",
            "color": "white"
@@ -66,7 +66,7 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
        {
          "type": "card",
          "title": "Card Title",
-         "style": { "margin": "20px 0" }
+         "style": { "margin": "20px 0" },
          "content": [
            {
              "type": "text",
@@ -76,7 +76,7 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
            {
              "type": "button",
              "content": "Click Me",
-             "action": "handleCardButtonClick"
+             "action": handleCardButtonClick
            }
          ],
        }
@@ -115,12 +115,12 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
          "placeholder": "Enter your name",
          "inputType": "text",
          "style": { "margin": "10px 0" },
-         "action": "handleInputChange"
+         "action": handleInputChange
       },
       {
          "type": "button",
          "content": "Submit",
-         "action": "handleSubmit",
+         "action": handleSubmit,
          "style": {
             "backgroundColor": "green",
             "color": "white"
@@ -129,7 +129,7 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
       {
          "type": "card",
          "title": "Card Title",
-         "style": { "margin": "20px 0" }
+         "style": { "margin": "20px 0" },
          "content": [
             {
                "type": "text",
@@ -139,7 +139,7 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
             {
                "type": "button",
                "content": "Click Me",
-               "action": "handleCardButtonClick"
+               "action": handleCardButtonClick
             }
          ],
       }

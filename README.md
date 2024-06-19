@@ -42,122 +42,71 @@ Neumix is a dynamic UI renderer built with React and integrated with NextUI comp
 
 ### Usage
 
-1. Define your UI elements in a JSON structure. Here is an example JSON configuration:
+1. Import and use the `DynamicUI` component in your React application. Ensure you define the necessary action handlers.
 
-   ```json
-   [
-       {
-         "type": "text",
-         "size": "h1",
-         "content": "Welcome to Dynamic UI",
-         "style": { "color": "blue" }
-       },
-       {
-         "type": "input",
-         "placeholder": "Enter your name",
-         "inputType": "text",
-         "style": { "margin": "10px 0" },
-         "action": handleInputChange
-       },
-       {
-         "type": "button",
-         "content": "Submit",
-         "action": handleSubmit,
-         "style": {
-           "backgroundColor": "green",
-           "color": "white"
-         },
-       },
-       {
-         "type": "card",
-         "title": "Card Title",
-         "style": { "margin": "20px 0" },
-         "content": [
-           {
-             "type": "text",
-             "size": "p",
-             "content": "This is a card content"
-           },
-           {
-             "type": "button",
-             "content": "Click Me",
-             "action": handleCardButtonClick
-           }
-         ],
-       }
-     ]
+```tsx
+"use client";
+
+import React, { useState } from 'react';
+import { NextPage } from 'next';
+import Dynamix from '@/components/dynamix';
+let rerender = ()=>{};
+const dynamix = new Dynamix(rerender); // Create an instance of Dynamix
+
+// Example elements to be added to the 'root' container
+dynamix.appendElement('root', {
+	type: 'text',
+	content: 'Register',
+	style: { fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem' },
+});
+
+dynamix.appendElement('root', {
+	type: 'input',
+	id: 'email',
+	inputType: 'email',
+	placeholder: 'Email',
+	onChange: (val) => {
+		console.log(val);
+	},
+});
+
+dynamix.appendElement('root', {
+	type: 'input',
+	id: 'password',
+	inputType: 'password',
+	placeholder: 'Password',
+	onChange: (val) => {
+		console.log(val);
+	},
+});
+
+dynamix.appendElement('root', {
+	type: 'button',
+	id:'btn-passwd',
+	content: 'Show password',
+	onClick: () => {
+		dynamix.editElement('password', (prev) => ({
+			inputType: prev.inputType === 'text' ? 'password' : 'text',
+		}));
+		dynamix.editElement('btn-passwd', (prev)=>({
+			content:prev.content==='Show password'?'Hide password':'Show password'
+		}))
+	},
+});
+
+dynamix.editElement('root', ()=>({gap:'1rem'}))
+const Page: NextPage = () => {
+	const [, setTick] = useState(0);
+	rerender = () => setTick((tick) => (tick + 1) % 100); // State to trigger re-render
+	dynamix.fetchRerender(rerender);
+
+	return <>{dynamix.compile()}</>;
+};
+
+export default Page;
    ```
 
-2. Import and use the `DynamicUI` component in your React application. Ensure you define the necessary action handlers.
-
-   ```javascript
-   import React from 'react';
-   import DynamicUI, { allElements } from '@/components/dynamix';
-
-   // Define action handlers
-   const handleInputChange = (e) => {
-     console.log('Input changed:', e.target.value);
-   };
-
-   const handleSubmit = () => {
-     console.log('Submit button clicked');
-   };
-
-   const handleCardButtonClick = () => {
-     console.log('Card button clicked');
-   };
-
-   // JSON structure defining the UI elements
-   const json =    [
-      {
-         "type": "text",
-         "size": "h1",
-         "content": "Welcome to Dynamic UI",
-         "style": { "color": "blue" }
-      },
-      {
-         "type": "input",
-         "placeholder": "Enter your name",
-         "inputType": "text",
-         "style": { "margin": "10px 0" },
-         "action": handleInputChange
-      },
-      {
-         "type": "button",
-         "content": "Submit",
-         "action": handleSubmit,
-         "style": {
-            "backgroundColor": "green",
-            "color": "white"
-         },
-      },
-      {
-         "type": "card",
-         "title": "Card Title",
-         "style": { "margin": "20px 0" },
-         "content": [
-            {
-               "type": "text",
-               "size": "p",
-               "content": "This is a card content"
-            },
-            {
-               "type": "button",
-               "content": "Click Me",
-               "action": handleCardButtonClick
-            }
-         ],
-      }
-   ];
-
-   const App = () => {
-     return <DynamicUI elements={json.elements as allElements[]} />;
-   };
-
-   export default App;
-   ```
-
-3. Run your React application to see the dynamically rendered UI.
+2. Run your React application to see the dynamically rendered UI.
 
 ### Documentation
 For more details and examples, please refer to the [documentation](./docs).

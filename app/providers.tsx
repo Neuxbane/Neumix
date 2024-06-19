@@ -15,7 +15,11 @@ export interface ProvidersProps {
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
   let token = Cookies.get('token');
-  if(!['/auth/login','/auth/register'].includes(window.location.pathname)&&undefined==token) return router.replace('/auth/login');
+  if (typeof window !== 'undefined') {
+    if (!['/auth/login','/auth/register'].includes(window.location.pathname) && undefined == token) {
+      return router.replace('/auth/login');
+    }
+  }
 
   return (
     <NextUIProvider navigate={router.push}>

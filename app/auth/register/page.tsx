@@ -2,53 +2,58 @@
 
 import React, { useState } from 'react';
 import { NextPage } from 'next';
-import DynamicUI, { allElements } from '@/components/dynamix';
+import Dynamix from '@/components/dynamix';
+let rerender = ()=>{};
+const dynamix = new Dynamix(rerender); // Create an instance of Dynamix
 
-const Home: NextPage = () => {
-  const [elements, setElements] = useState<allElements[]>([
-    { type: 'avatar', content: 'https://via.placeholder.com/150', style: { width: '100px', height: '100px' } },
-    { type: 'button', content: 'Click me', action: () => alert('Button clicked!') },
-    {
-      type: 'card',
-      title: 'Card Title',
-      avatar: 'https://via.placeholder.com/50',
-      content: [{ type: 'text', content: 'Card Content', size: 'p' }],
-      footer: { left: [{ type: 'text', content: 'Left Footer', size: 'p' }], middle: [], right: [{ type: 'text', content: 'Right Footer', size: 'p' }] },
-    },
-    { type: 'input', placeholder: 'Enter text'},
-    { type: 'text-area', placeholder: 'Enter more text'},
-    { type: 'select', placeholder: 'Select an option', value: '', options: ['Option 1', 'Option 2'], selectionMode: 'single' },
-    { type: 'switch', value: 'false' },
-    { type: 'slider'},
-    { type: 'image', src: 'https://via.placeholder.com/300', style: { width: '300px' } },
-    { type: 'text', content: 'This is a text element', size: 'h1' },
-    {
-      type: 'modal',
-      id: 'modal-1',
-      header: [{ type: 'text', content: 'Modal Header', size: 'h3' }],
-      content: [{ type: 'text', content: 'Modal Content', size: 'p' }],
-      footer: [{ type: 'button', content: 'Close', action: () => alert('Modal closed!') }],
-    },
-    {
-      type: 'tabs',
-      content: [
-        { name: 'Tab 1', content: [{ type: 'text', content: 'Content of Tab 1', size: 'p' }] },
-        { name: 'Tab 2', content: [{ type: 'text', content: 'Content of Tab 2', size: 'p' }] },
-      ],
-    },
-	{type: 'button', action: () => {
-		setElements(prevElements => [
-		  ...prevElements,
-		  { type: 'text', content: 'New Text Element', size: 'h2', style: { color: 'blue' } },
-		]);
-	  }, content: "test"}
-  ]);
-  return (
-    <div>
-      <h1>Dynamic UI Test</h1>
-      <DynamicUI elements={elements} />
-    </div>
-  );
+// Example elements to be added to the 'root' container
+dynamix.appendElement('root', {
+	type: 'text',
+	content: 'Register',
+	style: { fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem' },
+});
+
+dynamix.appendElement('root', {
+	type: 'input',
+	id: 'email',
+	inputType: 'email',
+	placeholder: 'Email',
+	onChange: (val) => {
+		console.log(val);
+	},
+});
+
+dynamix.appendElement('root', {
+	type: 'input',
+	id: 'password',
+	inputType: 'password',
+	placeholder: 'Password',
+	onChange: (val) => {
+		console.log(val);
+	},
+});
+
+dynamix.appendElement('root', {
+	type: 'button',
+	id:'btn-passwd',
+	content: 'Show password',
+	onClick: () => {
+		dynamix.editElement('password', (prev) => ({
+			inputType: prev.inputType === 'text' ? 'password' : 'text',
+		}));
+		dynamix.editElement('btn-passwd', (prev)=>({
+			content:prev.content==='Show password'?'Hide password':'Show password'
+		}))
+	},
+});
+
+dynamix.editElement('root', ()=>({gap:'1rem'}))
+const Page: NextPage = () => {
+	const [, setTick] = useState(0);
+	rerender = () => setTick((tick) => (tick + 1) % 100); // State to trigger re-render
+	dynamix.fetchRerender(rerender);
+
+	return <>{dynamix.compile()}</>;
 };
 
-export default Home;
+export default Page;

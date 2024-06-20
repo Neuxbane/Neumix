@@ -7,47 +7,68 @@ let rerender = ()=>{};
 const dynamix = new Dynamix(rerender); // Create an instance of Dynamix
 
 // Example elements to be added to the 'root' container
-dynamix.appendElement('root', {
-	type: 'text',
-	content: 'Register',
-	style: { fontSize: '24px', fontWeight: 'bold', marginBottom: '1rem' },
-});
 
-dynamix.appendElement('root', {
-	type: 'input',
-	id: 'email',
-	inputType: 'email',
-	placeholder: 'Email',
-	onChange: (val) => {
-		console.log(val);
+dynamix.appendElement('root', 'default', {
+	type:'container',
+	style:{padding:'0 20dvw'},
+	config: {
+		direction:'vertical',
+		justify:'center',
+		align:'center',
+		gap:'1rem',
 	},
+	children:{
+		default:[
+			{
+				type:'input',
+				config:{
+					label:'Email',
+					type:'email',
+					variant:'bordered',
+				},
+				functions:{
+					onValueChange: (value)=>{console.log(value)},
+				}
+			},
+			{
+				id:'password',
+				type:'input',
+				config:{
+					label:'Passowrd',
+					type:'password',
+					variant:'bordered',
+				},
+				functions:{
+					onValueChange: (value)=>{console.log(value)},
+				}
+			},
+			{
+				type:'container',
+				config:{
+					direction:'horizontal',
+					justify:'space-between'
+				},
+				children:{
+					default:[
+						{
+							type:'button',
+							children:{
+								content:[{type:'text',content:{text:'Hello my name is jeff'}}]
+							}
+						},
+						{
+							type:'button',
+							children:{
+								content:[{type:'text',content:{text:'jeff'}}]
+							}
+						}
+					]
+				}
+			}
+		]
+	}
 });
 
-dynamix.appendElement('root', {
-	type: 'input',
-	id: 'password',
-	inputType: 'password',
-	placeholder: 'Password',
-	onChange: (val) => {
-		console.log(val);
-	},
-});
-
-dynamix.appendElement('root', {
-	type: 'button',
-	id:'btn-passwd',
-	content: 'Show password',
-	onClick: () => {
-		dynamix.editElement('password', (prev) => ({
-			inputType: prev.inputType === 'text' ? 'password' : 'text',
-		}));
-		dynamix.editElement('btn-passwd', (prev)=>({
-			content:prev.content==='Show password'?'Hide password':'Show password'
-		}))
-	},
-});
-
-dynamix.editElement('root', ()=>({gap:'1rem'}))
 const Page: NextPage = () => {
 	const [, setTick] = useState(0);
 	rerender = () => setTick((tick) => (tick + 1) % 100); // State to trigger re-render

@@ -69,6 +69,7 @@ type functionsListener = {
 interface ToolType {
 	render:(id: string) => JSX.Element;
 	getElement: (id: string) => AllElement;
+	mapping:(branches:Branch[] | undefined, id:string) => JSX.Element;
 }
 
 interface UniversalElement {
@@ -114,7 +115,7 @@ interface InputElement extends UniversalElement {
 }
 
 const renderInputElement = (element: InputElement, tool:ToolType) => (
-	<Input key={element.id} {...{...element.config, ...element.functions, style: element.style, endContent:<React.Fragment key={element.id+'end'}>{element.children?.endContent?.map((el)=>tool.render(el as string))}</React.Fragment>, startContent:<React.Fragment key={element.id+'start'}>{element.children?.startContent?.map((el)=>tool.render(el as string))}</React.Fragment>, className: element.className}}></Input>
+	<Input key={element.id} {...{...element.config, ...element.functions, style: element.style, className: element.className, endContent:tool.mapping(element.children?.endContent, element.id+'end'), startContent:tool.mapping(element.children?.startContent, element.id+'start')}}></Input>
 );
 
 interface ContainerElement extends UniversalElement {
@@ -129,7 +130,13 @@ interface ContainerElement extends UniversalElement {
 }
 
 const renderContainerElement = (element: ContainerElement, tool:ToolType) => (
-	<div key={element.id} className={element.className} style={{height:'-webkit-fill-available',width:'-webkit-fill-available',display:'flex', flexDirection:element.config?.direction?.replace('vertical','column')?.replace('horizontal','row')??'column' as any, alignItems:element.config?.align, justifyContent:element.config?.justify, ...element.style}}>{element.children?.default.map((el,i,a)=><React.Fragment key={element.id+'c'+i}>{(tool.getElement(el as string).type != 'modal' && i!=0 && i!=a.length)?<div key={element.id+'-'+i} style={{width:element.config?.gap, height:element.config?.gap}}></div>:<React.Fragment key={element.id+'t'+i}></React.Fragment>}{tool.render(el as string)}</React.Fragment>)}</div>
+	<div key={element.id} className={element.className} style={{height:'-webkit-fill-available',width:'-webkit-fill-available',display:'flex', flexDirection:element.config?.direction?.replace('vertical','column')?.replace('horizontal','row')??'column' as any, alignItems:element.config?.align, justifyContent:element.config?.justify, ...element.style}}>
+		{element.children?.default.map((el,i,a)=>
+		<React.Fragment key={element.id+'c'+i}>
+			{(tool.getElement(el as string).type != 'modal' && i!=0 && i!=a.length)?<div key={element.id+'-'+i} style={{width:element.config?.gap, height:element.config?.gap}}></div>:<React.Fragment key={element.id+'t'+i}></React.Fragment>}
+			{tool.render(el as string)}
+		</React.Fragment>)}
+	</div>
 );
 
 interface ButtonElement extends UniversalElement {
@@ -157,10 +164,10 @@ interface ButtonElement extends UniversalElement {
 
 const renderButtonElement = (element: ButtonElement, tool:ToolType) => (
 	<Button key={element.id} {...{...element.config, ...element.functions, style:element.style, className: element.className,
-		endContent:<React.Fragment key={element.id+'end'}>{element.children?.endContent?.map((el)=>tool.render(el as string))}</React.Fragment>,
-		startContent:<React.Fragment key={element.id+'start'}>{element.children?.startContent?.map((el)=>tool.render(el as string))}</React.Fragment>,
-		spinner:<React.Fragment key={element.id+'spinner'}>{element.children?.spinner?.map((el)=>tool.render(el as string))}</React.Fragment>,
-		}}><React.Fragment>{element.children?.content?.map((el)=>tool.render(el as string))}</React.Fragment></Button>
+		endContent:tool.mapping(element.children?.endContent, element.id+'end'),
+		startContent:tool.mapping(element.children?.startContent, element.id+'start'),
+		spinner:tool.mapping(element.children?.spinner, element.id+'spinner'),
+		}}>{tool.mapping(element.children?.content, element.id+'content')}</Button>
 );
 
 interface TextElement extends UniversalElement {
@@ -180,7 +187,14 @@ interface ModalElement extends UniversalElement {
 		isDismissable?:boolean;
 		placement?:'auto'|'top'|'bottom'|'center'|'top-center'|'bottom-center';
 		scrollBehavior?:'inside'|'outside';
+		backdrop?:"opaque"|"blur"|"transparent";
+		classNames?:{[slot in "wrapper" | "base" | "backdrop" | "header" | "body" | "footer" | "closeButton"]: string;};
 	},
+	children?:{
+		header?:Branch[],
+		body?:Branch[],
+		footer?:Branch[],
+	}
 	functions?:{
 		onClose?:onCloseEvent;
 		onOpenChange?:onOpenChangeEvent;
@@ -188,11 +202,11 @@ interface ModalElement extends UniversalElement {
 }
 
 const renderModalElement = (element: ModalElement, tool: ToolType) => (
-	<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+	<Modal {...{...element.config, ...element.functions, style: element.style, className: element.className}}>
 		<ModalContent>
-			<ModalHeader>Modal Title</ModalHeader>
-			<ModalBody></ModalBody>
-			<ModalFooter></ModalFooter>
+			<ModalHeader>{tool.mapping(element.children?.header, element.id+'header')}</ModalHeader>
+			<ModalBody>{tool.mapping(element.children?.body, element.id+'body')}</ModalBody>
+			<ModalFooter>{tool.mapping(element.children?.footer, element.id+'footer')}</ModalFooter>
 		</ModalContent>
 	</Modal>
 );
@@ -244,17 +258,18 @@ export default class Dynamix {
 		this.rerender();
 	}
 
-	// addModal(data: ModalElement) {
-	// 	data.id = data.id ?? `elm-${Date.now()}-${Math.random()}`;
-	// }
+	addModal(data: ModalElement) {
+		this.appendElement('root','default', data);
+	}
 
 	toggleModal(id: string) {
+		this.editElement(id, (prev)=>({...prev, config:{...prev.config, isOpen: !(prev.config as any)?.isOpen??false}}));
 		this.rerender();
 	}
 
 	renderElement = (id: string): JSX.Element => {
 		const element = this.metaData[id];
-		const tool:ToolType = {render:this.renderElement, getElement:(id:string)=>this.metaData[id]};
+		const tool:ToolType = {render:this.renderElement, getElement:(id:string)=>this.metaData[id], mapping:(branches, id)=><React.Fragment key={id}>{branches?.map((el)=>this.renderElement(el as string))}</React.Fragment>};
 		if(!element?.type) return <>Err</>;
 		switch (element.type) {
 			case 'input':
@@ -265,8 +280,8 @@ export default class Dynamix {
 				return renderButtonElement(element, tool);
 			case 'text':
 				return renderTextElement(element, tool);
-			// case 'modal':
-			// 	return renderModal(element);
+			case 'modal':
+				return renderModalElement(element, tool);
 			default:
 				return <div key={'error'} style={{ color: 'red' }}>Element with id {id} is not implemented nor exist.</div>;
 		}

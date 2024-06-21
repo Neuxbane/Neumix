@@ -8,6 +8,73 @@ const dynamix = new Dynamix(rerender); // Create an instance of Dynamix
 
 // Example elements to be added to the 'root' container
 
+dynamix.addModal({
+		"type": "modal",
+		"id": "modal1",
+		"config": {
+		  "size": "lg",
+		  "isOpen": true,
+		  "placement": "center",
+		  "scrollBehavior": "inside",
+		  "backdrop": "blur",
+		},
+		"children": {
+		  "header": [
+			{
+			  "type": "text",
+			  "id": "headerText",
+			  "content": {
+				"text": "This is the header"
+			  }
+			}
+		  ],
+		  "body": [
+			{
+			  "type": "text",
+			  "id": "bodyText",
+			  "content": {
+				"text": "This is the body content"
+			  }
+			},
+			{
+			  "type": "input",
+			  "id": "input1",
+			  "config": {
+				"placeholder": "Enter text here",
+				"type": "text"
+			  }
+			}
+		  ],
+		  "footer": [
+			{
+			  "type": "button",
+			  "id": "closeButton",
+			  "config": {
+				"color": "primary",
+				"size": "md",
+				"variant": "solid",
+				"isDisabled": false,
+				"isLoading": false
+			  },
+			  "functions": {
+				"onClick": () => dynamix.toggleModal('modal1')
+			  },
+			  "children": {
+				"content": [
+				  {
+					"type": "text",
+					"id": "buttonText",
+					"content": {
+					  "text": "Close"
+					}
+				  }
+				]
+			  }
+			}
+		  ]
+		}
+})
+
 dynamix.appendElement('root', 'default', {
 	type:'container',
 	style:{padding:'0 20dvw'},
@@ -60,6 +127,9 @@ dynamix.appendElement('root', 'default', {
 							type:'button',
 							children:{
 								content:[{type:'text',content:{text:'jeff'}}]
+							},
+							functions:{
+								onClick: () => dynamix.toggleModal('modal1')
 							}
 						}
 					]
@@ -73,7 +143,6 @@ const Page: NextPage = () => {
 	const [, setTick] = useState(0);
 	rerender = () => setTick((tick) => (tick + 1) % 100); // State to trigger re-render
 	dynamix.fetchRerender(rerender);
-
 	return <>{dynamix.compile()}</>;
 };
 

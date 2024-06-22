@@ -9,6 +9,9 @@
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^6.5.2",
+		"@fortawesome/free-solid-svg-icons": "^6.5.2",
+		"@fortawesome/react-fontawesome": "^0.2.2",
 		"@nextui-org/button": "^2.0.32",
 		"@nextui-org/code": "^2.0.28",
 		"@nextui-org/input": "^2.2.0",
@@ -54,6 +57,7 @@
 		"react-dnd": "^16.0.1",
 		"react-dnd-html5-backend": "^16.0.1",
 		"react-dom": "18.3.1",
+		"socket.io": "^4.7.5",
 		"tailwind-variants": "^0.1.20",
 		"tailwindcss": "3.4.3",
 		"typescript": "5.0.4"

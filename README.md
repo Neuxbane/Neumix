@@ -1,6 +1,11 @@
 # Neumix
 Please contribute on this repo by giving new feature on the `DynamicUI` component 🙏. This abstract bellow are written by ChatGPT by understanding the component and the target.
 
+# Todo
+- routing page
+- API
+- lazyload
+
 ## Preview
 ![preview1](/screenshoots/preview1.png)
 ![preview2](/screenshoots/preview2.png)

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import DynamicUI, { allElements } from '@/components/dynamix';
+import DynamicUI, { allElements } from '@/libs/dynamix/dynamix.client';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
